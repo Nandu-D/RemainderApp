@@ -8,12 +8,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 
 public class DBHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "Employee.db";
-    public static final String TABLE_NAME = "employee_table";
+    public static final String DATABASE_NAME = "TODO.db";
+    public static final String TABLE_NAME = "remainder_table";
     public static final String COL_1 = "ID";
-    public static final String COL_2 = "NAME";
-    public static final String COL_3 = "GENDER";
-    public static final String COL_4 = "PLATFORM";
+    public static final String COL_2 = "Date";
+    public static final String COL_3 = "Message";
     SQLiteDatabase db;
 
     public DBHelper(Context context) {
@@ -34,12 +33,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean insertData(String name, String Gender, String Platform) {
+    public boolean insertData(String date, String message) {
         db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_2, name);
-        contentValues.put(COL_3, Gender);
-        contentValues.put(COL_4, Platform);
+        contentValues.put(COL_2, date);
+        contentValues.put(COL_3, message);
         Long result = db.insert(TABLE_NAME, null, contentValues);
         if (result > 0)
             return true;
