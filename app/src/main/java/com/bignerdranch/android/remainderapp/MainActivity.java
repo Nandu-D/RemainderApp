@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,11 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
     private EditRemainderDialog mEditRemainderDialog = null;
     private DatabaseReference databaseReference;
-
+    private DBHelper mDb;
+    ArrayList<RemainderDataModel> list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mDb=new DBHelper(this);
 
         //Database Reference
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Reminder");
@@ -42,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.toolbar);
         mRecyclerView = findViewById(R.id.recycler_view);
         mFloatingActionButton = findViewById(R.id.floatingActionButton);
-
-        mRemainderAdapter = new RemainderAdapter(getSupportFragmentManager());
+        list= mDb.getAllData();
+        mRemainderAdapter = new RemainderAdapter(getSupportFragmentManager(),list);
         mLayoutManager = new LinearLayoutManager(this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -60,19 +63,22 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void editButtonClickAction(String date) {
-                Map<String, String> map = new HashMap<>();
-                map.put("Date", date);
-                map.put("Time", "6:00 PM");
 
+                boolean isInserted=mDb.insertData("03/07/18",date);
+                if(isInserted){
+                    Map<String, String> map = new HashMap<>();
+                    map.put("Date", date);
+                    map.put("Time", "6:00 PM");
+                    DatabaseReference mDataRef = databaseReference.push();
+                    mDataRef.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(MainActivity.this, "Upload done", Toast.LENGTH_LONG).show();
+                            mEditRemainderDialog.dismiss();
+                        }
+                    });
+                }
 
-                DatabaseReference mDataRef = databaseReference.push();
-                mDataRef.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(MainActivity.this, "Upload done", Toast.LENGTH_LONG).show();
-                        mEditRemainderDialog.dismiss();
-                    }
-                });
             }
         });
 

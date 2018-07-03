@@ -3,8 +3,11 @@ package com.bignerdranch.android.remainderapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
 
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -16,13 +19,13 @@ public class DBHelper extends SQLiteOpenHelper {
     SQLiteDatabase db;
 
     public DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, 2);
 
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT,NAME TEXT,GENDER TEXT,PLATFORM TEXT)");
+        db.execSQL("CREATE TABLE " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT,DATE TEXT,MESSAGE TEXT)");
 
     }
 
@@ -46,23 +49,20 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-/*
-    public ArrayList<DataBean> getAllData() {
-        ArrayList<DataBean> list = new ArrayList<>();
+    public ArrayList<RemainderDataModel> getAllData() {
+        ArrayList<RemainderDataModel> list = new ArrayList<>();
         db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * from employee_table", null);
+        Cursor cursor = db.rawQuery("SELECT * from remainder_table", null);
         while (cursor.moveToNext()) {
             String id = cursor.getString(0);
-            String name = cursor.getString(1);
-            String gender = cursor.getString(2);
-            String platform = cursor.getString(3);
-            DataBean bean = new DataBean(id, name, gender, platform);
+            String date = cursor.getString(1);
+            String message = cursor.getString(2);
+            RemainderDataModel bean = new RemainderDataModel(date, message);
 
             list.add(bean);
         }
         return list;
     }
-*/
 
     public void deleteEntry(int row) {
         db = this.getWritableDatabase();

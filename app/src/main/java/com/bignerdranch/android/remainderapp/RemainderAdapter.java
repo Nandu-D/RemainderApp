@@ -9,16 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.ViewHolder> {
     private EditRemainderDialog editRemainderDialog = null;
     private FragmentManager mFragmentManager = null;
+    ArrayList<RemainderDataModel> items;
 
-    public RemainderAdapter(FragmentManager supportFragmentManager) {
+    public RemainderAdapter(FragmentManager supportFragmentManager, ArrayList<RemainderDataModel> list) {
         mFragmentManager = supportFragmentManager;
+        items=list;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.fullLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -29,16 +33,19 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
                     }
 
                     @Override
-                    public void editButtonClickAction() {
+                    public void editButtonClickAction(String text) {
 
                     }
                 });
+
 
                 editRemainderDialog.changeTextOfButton("Edit");
                 editRemainderDialog.changeTitleOfDialog("Edit Remainder");
                 editRemainderDialog.show(mFragmentManager, "Dialog");
             }
         });
+        holder.date.setText(items.get(position).date.toString());
+        holder.message.setText(items.get(position).message.toString());
     }
 
     @NonNull
@@ -50,7 +57,7 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
 
     @Override
     public int getItemCount() {
-        return 5;
+        return items.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

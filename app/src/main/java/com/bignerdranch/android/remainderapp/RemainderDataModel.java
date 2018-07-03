@@ -2,9 +2,10 @@ package com.bignerdranch.android.remainderapp;
 
 public class RemainderDataModel {
     String message;
-    float date;
+    String date;
 
-    public RemainderDataModel(String message, float date) {
+
+    public RemainderDataModel(String date, String message) {
         this.message = message;
         this.date = date;
     }
@@ -17,11 +18,11 @@ public class RemainderDataModel {
         this.message = message;
     }
 
-    public float getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(float date) {
+    public void setDate(String date) {
         this.date = date;
     }
 }
