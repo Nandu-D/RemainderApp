@@ -12,10 +12,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import android.support.annotation.NonNull;
 import java.util.Map;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        //Database Reference
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Reminder");
 
         Map<String, String> map = new HashMap<>();
@@ -52,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
 
         mToolbar = findViewById(R.id.toolbar);
         mRecyclerView = findViewById(R.id.recycler_view);
