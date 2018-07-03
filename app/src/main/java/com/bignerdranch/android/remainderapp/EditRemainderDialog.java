@@ -69,7 +69,7 @@ public class EditRemainderDialog extends DialogFragment {
         mEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDialogClickActions.editButtonClickAction();
+                mDialogClickActions.editButtonClickAction(mEditText.getText().toString().trim());
             }
         });
     }
@@ -86,5 +86,5 @@ public class EditRemainderDialog extends DialogFragment {
 
 interface DialogClickActions {
     void cancelButtonClickAction();
-    void editButtonClickAction();
+    void editButtonClickAction(String date);
 }

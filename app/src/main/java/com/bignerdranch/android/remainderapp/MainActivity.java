@@ -36,19 +36,7 @@ public class MainActivity extends AppCompatActivity {
         //Database Reference
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Reminder");
 
-        Map<String, String> map = new HashMap<>();
-        map.put("Date", "3rd,Jully,2018");
-        map.put("Time", "6:00 PM");
 
-
-        DatabaseReference mDataRef = databaseReference.push();
-        mDataRef.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(MainActivity.this, "Upload done", Toast.LENGTH_LONG).show();
-
-            }
-        });
 
 
         mToolbar = findViewById(R.id.toolbar);
@@ -67,11 +55,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void cancelButtonClickAction() {
                 mEditRemainderDialog.dismiss();
+
             }
 
             @Override
-            public void editButtonClickAction() {
+            public void editButtonClickAction(String date) {
+                Map<String, String> map = new HashMap<>();
+                map.put("Date", date);
+                map.put("Time", "6:00 PM");
 
+
+                DatabaseReference mDataRef = databaseReference.push();
+                mDataRef.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(MainActivity.this, "Upload done", Toast.LENGTH_LONG).show();
+                        mEditRemainderDialog.dismiss();
+                    }
+                });
             }
         });
 
