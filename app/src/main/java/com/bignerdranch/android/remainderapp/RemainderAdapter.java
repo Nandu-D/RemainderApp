@@ -23,7 +23,7 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
 
     @Override
     public int getItemCount() {
-        return 0;
+        return 5;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
