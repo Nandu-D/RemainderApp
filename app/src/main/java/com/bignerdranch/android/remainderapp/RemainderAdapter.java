@@ -71,4 +71,9 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
             date = itemView.findViewById(R.id.date);
         }
     }
+
+    public void setAdapeter(String newData){
+        items.add(new RemainderDataModel(newData,"time"));
+        notifyDataSetChanged();
+    }
 }

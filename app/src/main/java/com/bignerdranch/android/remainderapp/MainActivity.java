@@ -1,5 +1,6 @@
 package com.bignerdranch.android.remainderapp;
 
+import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,7 +24,7 @@ import android.view.View;
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private FloatingActionButton mFloatingActionButton;
-    private RecyclerView.Adapter mRemainderAdapter;
+    private RemainderAdapter mRemainderAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private Toolbar mToolbar;
 
@@ -30,23 +32,24 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private DBHelper mDb;
     ArrayList<RemainderDataModel> list;
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mDb=new DBHelper(this);
+        progressDialog=new ProgressDialog(this);
+        mDb = new DBHelper(this);
 
         //Database Reference
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Reminder");
 
 
-
-
         mToolbar = findViewById(R.id.toolbar);
         mRecyclerView = findViewById(R.id.recycler_view);
         mFloatingActionButton = findViewById(R.id.floatingActionButton);
-        list= mDb.getAllData();
-        mRemainderAdapter = new RemainderAdapter(getSupportFragmentManager(),list);
+        list = mDb.getAllData();
+        mRemainderAdapter = new RemainderAdapter(getSupportFragmentManager(), list);
         mLayoutManager = new LinearLayoutManager(this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -62,10 +65,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void editButtonClickAction(String date) {
-
-                boolean isInserted=mDb.insertData("03/07/18",date);
-                if(isInserted){
+            public void editButtonClickAction(final String date) {
+                progressDialog.show();
+                boolean isInserted = mDb.insertData("03/07/18", date);
+                if (isInserted) {
                     Map<String, String> map = new HashMap<>();
                     map.put("Date", date);
                     map.put("Time", "6:00 PM");
@@ -74,7 +77,10 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             Toast.makeText(MainActivity.this, "Upload done", Toast.LENGTH_LONG).show();
+                            mRemainderAdapter.setAdapeter(date);
                             mEditRemainderDialog.dismiss();
+                            progressDialog.dismiss();
+
                         }
                     });
                 }
@@ -92,4 +98,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }
